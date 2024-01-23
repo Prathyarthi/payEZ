@@ -47,22 +47,19 @@
 // })
 
 
-import zod from 'zod'
+import zod, { string } from 'zod'
 import jwt from 'jsonwebtoken'
-import { User } from '../models/userModel'
+import { User } from '../models/userModel.js'
 import { config } from 'dotenv'
 config()
 
+const signupSchema = zod.object({
+    email: zod.string().email(),
+    password: zod.string().min(8),
+    firstName: zod.string(),
+    lastName: zod.string(),
+})
 const signup = async (req, res) => {
-
-
-    const signupSchema = zod.object({
-        email: zod.string().email(),
-        password: zod.string().min(8),
-        firstName: zod.string(),
-        lastName: zod.string(),
-    })
-
 
     const { email, password, firstName, lastName } = req.body
     const signupValidation = signupSchema.safeParse(req.body)
@@ -104,9 +101,15 @@ const signup = async (req, res) => {
     })
 }
 
+
+const signinSchema = zod.object({
+    email: zod.string().email(),
+    password: zod.string().min(8)
+})
+
 const signin = async (req, res) => {
     const { email, password } = req.body
-    const signinValidation = signupSchema.safeParse(req.body)
+    const signinValidation = signinSchema.safeParse(req.body)
 
     if (!signinValidation.success) {
         return res.status(411).send("Invalid details")
@@ -134,8 +137,28 @@ const signin = async (req, res) => {
 }
 
 
-const updateDetails = (req, res) => {
+const updateSchema = zod.object({
+    password: string().optional(),
+    firstName: string().optional(),
+    lastName: string().optional()
+})
 
+const updateDetails = async (req, res) => {
+    const updateParsed = updateSchema.safeParse(req.body)
+
+    if (!updateParsed.success) {
+        return res.status(415).send('Invalid data')
+    }
+
+    const userId = req._id
+    const updateUserData = await User.updateOne(req.body, {
+        id: userId
+    })
+
+    res.status(200).json({
+        success: true,
+        message: "Updated details successfully"
+    })
 }
 
 export {
