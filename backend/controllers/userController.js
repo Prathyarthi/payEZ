@@ -134,7 +134,12 @@ const signin = async (req, res) => {
 }
 
 
+const updateDetails = (req, res) => {
+
+}
+
 export {
     signup,
-    signin
+    signin,
+    updateDetails
 }
