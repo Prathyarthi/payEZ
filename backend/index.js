@@ -1,10 +1,10 @@
-import connectToDB from './db/db';
-import express from ("express");
-import app from './app'
-require('dotenv/config')
+import connectToDB from './db/db.js';
+import app from './app.js'
+import { config } from 'dotenv'
+config()
 
-app.use('/', (req,res) => {
-    res.send('Hello World!')    
+app.use('/', (req, res) => {
+    res.send('Hello World!')
 })
 
 app.listen(process.env.PORT, () => {

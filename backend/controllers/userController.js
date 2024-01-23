@@ -87,6 +87,7 @@ const signup = async (req, res) => {
         return res.status(500).send("Server Error")
     }
 
+    user.save()
 
     const userId = user._id
 
@@ -120,8 +121,13 @@ const signin = async (req, res) => {
         password
     })
 
+    const validPassword = await userExists.comparePassword(password)
+    if (!validPassword) {
+        return res.status(401).send("Password is incorrect")
+    }
+
     if (!userExists) {
-        return res.status(401).send("Email or Password is incorrect")
+        return res.status(401).send("User doesn't exist")
     }
 
     const token = jwt.sign({
@@ -155,14 +161,45 @@ const updateDetails = async (req, res) => {
         id: userId
     })
 
+    updateUserData.save()
+
     res.status(200).json({
         success: true,
-        message: "Updated details successfully"
+        message: "Updated details successfully",
+        updateUserData
+    })
+}
+
+const getUserDetails = async (req, res) => {
+    const filter = req.query.filter || ""
+
+    const userDetails = User.find({
+        $or: [{
+            firstName: {
+                "$regex": filter
+            }
+        }, {
+            lastName: {
+                "$regex": filter
+            }
+        }]
+    })
+
+    res.status(200).json({
+        success: true,
+        message: "Fetched user details",
+        user: userDetails.map((data) => ({
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            id: data._id
+        }))
     })
 }
 
 export {
     signup,
     signin,
-    updateDetails
+    updateDetails,
+    getUserDetails
 }
