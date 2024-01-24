@@ -152,12 +152,12 @@ const updateDetails = async (req, res) => {
     const updateParsed = updateSchema.safeParse(req.body)
 
     if (!updateParsed.success) {
-        return res.status(415).send('Invalid data')
+        return res.status(411).send('Invalid data')
     }
 
     await User.updateOne({
-        userId:req._id
-    },req.body)
+        userId: req._id
+    }, req.body)
 
     res.status(200).json({
         success: true,
