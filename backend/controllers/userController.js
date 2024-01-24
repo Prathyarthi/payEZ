@@ -117,8 +117,7 @@ const signin = async (req, res) => {
     }
 
     const userExists = await User.findOne({
-        email,
-        password
+        email
     })
 
     const validPassword = await userExists.comparePassword(password)
@@ -156,17 +155,14 @@ const updateDetails = async (req, res) => {
         return res.status(415).send('Invalid data')
     }
 
-    const userId = req._id
-    const updateUserData = await User.updateOne(req.body, {
-        id: userId
+    // const userId = req._id
+    await User.updateOne(req.body, {
+        _id: req.userId
     })
-
-    updateUserData.save()
 
     res.status(200).json({
         success: true,
         message: "Updated details successfully",
-        updateUserData
     })
 }
 
