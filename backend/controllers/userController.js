@@ -155,10 +155,9 @@ const updateDetails = async (req, res) => {
         return res.status(415).send('Invalid data')
     }
 
-    // const userId = req._id
-    await User.updateOne(req.body, {
-        _id: req.userId
-    })
+    await User.updateOne({
+        userId:req._id
+    },req.body)
 
     res.status(200).json({
         success: true,
