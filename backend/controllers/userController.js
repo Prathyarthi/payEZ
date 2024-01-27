@@ -172,14 +172,16 @@ const updateDetails = async (req, res) => {
 const getUserDetails = async (req, res) => {
     const filter = req.query.filter || ""
 
-    const userDetails = User.find({
+    const userDetails = await User.find({
         $or: [{
             firstName: {
-                "$regex": filter
+                "$regex": filter,
+                "$options": 'i'
             }
         }, {
             lastName: {
-                "$regex": filter
+                "$regex": filter,
+                "$options": 'i'
             }
         }]
     })
@@ -194,6 +196,7 @@ const getUserDetails = async (req, res) => {
             id: data._id
         }))
     })
+    console.log("User Details:", userDetails);
 }
 
 export {
