@@ -51,6 +51,7 @@ import zod, { string } from 'zod'
 import jwt from 'jsonwebtoken'
 import { User } from '../models/userModel.js'
 import { config } from 'dotenv'
+import { Account } from '../models/accountModel.js'
 config()
 
 const signupSchema = zod.object({
@@ -87,9 +88,12 @@ const signup = async (req, res) => {
         return res.status(500).send("Server Error")
     }
 
-    user.save()
-
     const userId = user._id
+
+    await Account.create({
+        userId,
+        balance: 1 + Math.random() * 10000
+    })
 
     const token = jwt.sign({
         userId

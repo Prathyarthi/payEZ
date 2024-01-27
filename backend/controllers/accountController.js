@@ -1,15 +1,16 @@
 import { Account } from "../models/accountModel.js"
+import mongoose from 'mongoose'
 
 const getBalance = async (req, res) => {
-    const account = Account.findOne({
-        userId: req._id
+    const account = await Account.findOne({
+        userId: req.userId
     })
 
     res.status(200).json({
         success: true,
         balance: account.balance
     })
-}
+} 
 
 
 const transfer = async (req, res) => {
