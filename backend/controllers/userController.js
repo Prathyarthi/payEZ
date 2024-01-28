@@ -160,7 +160,7 @@ const updateDetails = async (req, res) => {
     }
 
     await User.updateOne({
-        userId: req._id
+        userId: req.userId
     }, req.body)
 
     res.status(200).json({
