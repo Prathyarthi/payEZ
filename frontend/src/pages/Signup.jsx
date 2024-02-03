@@ -41,6 +41,11 @@ export const Signup = () => {
             });
             localStorage.setItem("token", response.data.token)
             navigate("/dashboard")
+            toast.promise(res, {
+              loading: "Signing in!",
+              success: "Logged in successfully!",
+              error: "Signin failed!"
+            })
           }} label={"Sign up"} />
         </div>
         <Bottom_warning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />

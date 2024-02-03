@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
-import axios from "axios";
+import axios, { toFormData } from "axios";
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 export const SendMoney = () => {
     const [searchParams] = useSearchParams();
@@ -42,7 +43,7 @@ export const SendMoney = () => {
                             />
                         </div>
                         <button onClick={() => {
-                             axios.post("http://localhost:3000/api/v1/accounts/transfer", {
+                            const res = axios.post("http://localhost:3000/api/v1/accounts/transfer", {
                                 to: id,
                                 amount
                             }, {
@@ -50,6 +51,13 @@ export const SendMoney = () => {
                                     Authorization: "Bearer " + localStorage.getItem("token")
                                 }
                             })
+
+                            toast.promise(res, {
+                                loading: "Sending Money!",
+                                success: "Money sent successfully!",
+                                error: "Money tranfer failed!"
+                            })
+
                         }} className="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">
                             Initiate Transfer
                         </button>
