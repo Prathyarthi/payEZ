@@ -6,6 +6,7 @@ import Sub_Heading from "../components/Sub_Heading";
 import Input_box from "../components/Input_box";
 import Button from "../components/Button";
 import Bottom_warning from "../components/Bottom_warning";
+import { toast } from "react-hot-toast";
 
 export const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -33,19 +34,14 @@ export const Signup = () => {
         }} placeholder="12345678" label={"Password"} />
         <div className="pt-4">
           <Button onClick={async () => {
-            const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+            let response = await axios.post("http://localhost:3000/api/v1/user/signup", {
               email,
               firstName,
               lastName,
               password
             });
             localStorage.setItem("token", response.data.token)
-            navigate("/dashboard")
-            toast.promise(res, {
-              loading: "Signing in!",
-              success: "Logged in successfully!",
-              error: "Signin failed!"
-            })
+            navigate('/dashboard')
           }} label={"Sign up"} />
         </div>
         <Bottom_warning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />
@@ -53,3 +49,4 @@ export const Signup = () => {
     </div>
   </div>
 }
+

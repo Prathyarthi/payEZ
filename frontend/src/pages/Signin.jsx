@@ -6,6 +6,7 @@ import Button from '../components/Button'
 import Bottom_warning from '../components/Bottom_warning'
 import axios from 'axios'
 import { useNavigate } from "react-router-dom"
+import { toast } from 'react-hot-toast'
 
 function Signin() {
 
@@ -28,17 +29,18 @@ function Signin() {
           }} placeholder="Ex: John@123#" label={"Password"} />
           <div className="pt-4">
             <Button onClick={async () => {
-              const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+              let response = axios.post("http://localhost:3000/api/v1/user/signin", {
                 email,
                 password
               })
-              localStorage.setItem("token", response.data.token)
-              navigate('/dashboard')
-              toast.promise(res, {
+              await toast.promise(response, {
                 loading: "Signing in!",
                 success: "Logged in successfully!",
                 error: "Signin failed!"
               })
+              response = await response
+              localStorage.setItem("token", response.data.token)
+              navigate('/dashboard')
             }}
               label={"Sign in"} />
           </div>

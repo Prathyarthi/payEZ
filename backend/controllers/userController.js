@@ -199,9 +199,20 @@ const getUserDetails = async (req, res) => {
     console.log("User Details:", userDetails);
 }
 
+const getUser = async (req, res) => {
+    const user = await User.findById(req.userId)
+    res.status(200).json({
+        success: true,
+        message: "User fetched!",
+        user
+    })
+}
+
+
 export {
     signup,
     signin,
     updateDetails,
-    getUserDetails
+    getUserDetails,
+    getUser
 }
