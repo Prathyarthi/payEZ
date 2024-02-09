@@ -6,7 +6,7 @@ function Balance() {
     const [balance, setBalance] = useState(0);
 
     useEffect(() => {
-        axios.get("/accounts/getBalance", {
+        axios.get("http://localhost:3000/api/v1/accounts/getBalance", {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
             }
@@ -24,7 +24,7 @@ function Balance() {
                 Your balance
             </div>
             <div className="font-semibold ml-4 text-lg">
-                Rs {balance}
+                Rs {balance.toFixed(2)}
             </div>
         </div>
     )

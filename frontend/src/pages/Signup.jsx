@@ -34,12 +34,18 @@ export const Signup = () => {
         }} placeholder="12345678" label={"Password"} />
         <div className="pt-4">
           <Button onClick={async () => {
-            let response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+            let response = axios.post("http://localhost:3000/api/v1/user/signup", {
               email,
               firstName,
               lastName,
               password
             });
+            await toast.promise(response, {
+              loading: "Signup!",
+              success: "Signup successful!",
+              error: "Signup failed!"
+            })
+            response = await response
             localStorage.setItem("token", response.data.token)
             navigate('/dashboard')
           }} label={"Sign up"} />
